@@ -1,5 +1,5 @@
 # Megatron-LM 
 
-Megatron-LM Implemented by `PyTorch`
+Megatron-LM implemented by `PyTorch`
 
 ### testing...
