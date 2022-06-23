@@ -51,7 +51,7 @@ class ParallelEmbedding(nn.Module):
         self.end_idx = self.start_idx + sub_vocab_size - 1
         self.embed = nn.Embedding(sub_vocab_size, embedding_dim, None)
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor):
         """forward propagation
         
         Args:
@@ -91,7 +91,7 @@ class ParallelProjLM(nn.Module):
         self.rank, self.world_size = rank, world_size
         self.proj_lm = nn.Parameter(weight.T)
 
-    def forward(self, x):
+    def forward(self, x: torch.Tensor):
         """forward propagation
         
         Args:

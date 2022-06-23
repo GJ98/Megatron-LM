@@ -1,10 +1,11 @@
+import torch
 from torch import nn
 import torch.distributed as dist
 
 
 class ParallelCrossEntropyLoss(nn.Module):
 
-    def __init__(self, rank, world_size, num_class):
+    def __init__(self, rank: int, world_size: int, num_class: int):
         """parallel cross entropy loss
         
         Args:
@@ -21,7 +22,7 @@ class ParallelCrossEntropyLoss(nn.Module):
 
         self.rank = rank
 
-    def forward(self, logits, target):
+    def forward(self, logits: torch.Tensor, target: torch.Tensor):
         """forward propagation
         
         Args:
