@@ -5,6 +5,13 @@ import torch.distributed as dist
 class ParallelCrossEntropyLoss(nn.Module):
 
     def __init__(self, rank, world_size, num_class):
+        """parallel cross entropy loss
+        
+        Args:
+            rank (int): rank
+            world_size (int): world size
+            num_class (int): number of class
+        """
         super().__init__()
 
         assert num_class % world_size == 0

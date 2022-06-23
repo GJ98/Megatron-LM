@@ -1,3 +1,3 @@
 # Megatron-LM 
 
-Implemented by `PyTorch`
+Megatron-LM Implemented by `PyTorch`
