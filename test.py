@@ -1,4 +1,5 @@
 import os
+import time
 
 import torch
 from torch.optim import Adam
@@ -11,36 +12,35 @@ from utils import ParallelCrossEntropyLoss
 
 def run(rank, size):
 
-    model = ParallelGPT2(rank=rank,
+    model = ParallelGPT2(rank=rank, 
                          vocab_size=4,
-                         max_len=10,
+                         max_len=10, 
                          d_h=4,
-                         head=size,
+                         head=size, 
                          d_ff=16,
-                         n_layer=2,
+                         n_layer=2, 
                          pad=0,
                          p=0.1).to(f'cpu')
 
     loss_fn = ParallelCrossEntropyLoss(rank, size, 4)
 
-    optimizer = Adam(params=model.parameters(),
-                     lr=2.5e-4,
-                     weight_decay=0.01,
+    optimizer = Adam(params=model.parameters(), 
+                     lr=2.5e-4, 
+                     weight_decay=0.01, 
                      eps=1e-8)
 
     torch.random.manual_seed(40)
     input = torch.randint(0, 4, (2, 10))
 
+    print(f'rank {rank} start computing model')
     logits = model(input)
-    print(f'rank {rank} start compute loss \n')
+    print(f'rank {rank} start compute loss')
     loss = loss_fn(logits.view(-1, logits.size(-1)), input.view(-1))
-    print(f'rank {rank} finish compute loss \n')
-    print(f'rank {rank} start compute gradient \n')
+    print(f'rank {rank} start compute gradient')
     loss.backward()
-    print(f'rank {rank} end compute gradient \n')
-    print(f'rank {rank} start optimize weight \n')
+    print(f'rank {rank} start optimize weight')
     optimizer.step()
-    print(f'rank {rank} end optimize weight \n')
+    print(f'rank {rank} end optimize weight')
 
 def init_process(rank, size, fn):
     os.environ['MASTER_ADDR'] = '127.0.0.1'
